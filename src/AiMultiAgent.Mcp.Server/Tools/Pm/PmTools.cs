@@ -21,6 +21,8 @@ public sealed class PmTools(PmAgent agent)
         {
             
             ComponentName = componentName,
-            ComponentDescription = componentDescription
+            ComponentDescription = componentDescription,
+            FileName = fileName,
+            Data = data
         }, ct);
 }
