@@ -38,7 +38,12 @@ builder.Services.Configure<RouteOptions>(options =>
 
 builder.Services.AddSseMcpClient(
     options => options.EndpointPath = McpPath,
-    http => http.BaseAddress = new Uri("https://localhost:7244")
+     http =>
+     {
+         http.BaseAddress = new Uri("https://localhost:7244");
+         http.Timeout = Timeout.InfiniteTimeSpan; // ждать столько, сколько сервер отдаёт
+                                                  // или: http.Timeout = TimeSpan.FromMinutes(10); // ждать максимум 10 минут
+     }
 );
 
 
