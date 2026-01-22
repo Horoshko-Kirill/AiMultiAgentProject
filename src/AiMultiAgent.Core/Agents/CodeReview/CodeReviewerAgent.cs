@@ -214,5 +214,6 @@ public sealed class CodeReviewerAgent
         - Find real bugs, security risks, performance problems and design flaws.
         - Be strict and professional.
         - If code is clean, return empty arrays for issues and suggestions.
+        - Use only exists severity.
         """;
         }
