@@ -7,7 +7,7 @@ services:
     environment:
       NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     ports:
-      - "4040:4040" 
+      - "4040:4040"
     entrypoint: ["ngrok"]
     command: ["http", "n8n:5678"]
     depends_on:
@@ -19,12 +19,12 @@ services:
     ports:
       - "5678:5678"
     environment:
-      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
+      - WEBHOOK_URL=${N8N_WEBHOOK_URL}
       - N8N_EDITOR_BASE_URL=${N8N_EDITOR_BASE_URL}
       - N8N_HOST=${N8N_HOST}
       - N8N_PROTOCOL=https
+      - N8N_PROXY_HOPS=1
       - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=false
-      - N8N_TRUST_PROXY=true
     volumes:
       - ${N8N_USER_FOLDER}:/home/node/.n8n
 
@@ -42,5 +42,23 @@ services:
     depends_on:
       - n8n
 
+  stats:
+    build:
+      context: .
+      dockerfile: src/AiMultiAgent.Stats.Service/Dockerfile
+    container_name: ai-multi-agent-stats
+    environment:
+      - PM_UPSTREAM_REPORT_URL=http://api:7244/pmdebug/mcp/report
+      - ConnectionStrings__StatsDb=Data Source=/data/stats.db
+      - STATS_STORE_RAW_PAYLOADS=true
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8090:8080"
+    volumes:
+      - stats-data:/data
+    depends_on:
+      - api
+
 volumes:
   n8n_data:
+  stats-data:
